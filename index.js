@@ -1,6 +1,7 @@
 const express = require('express');
 const { StatusCodes } = require('http-status-codes');
 const newsRoute = require('./routes/newsRoute');
+const resourceNotFound = require('./middleware/notFound');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 
 // API Route
 app.use('/api/v1/news', newsRoute);
+app.use(resourceNotFound);
 
 // server
 const start = async () => {

@@ -107,10 +107,14 @@ const getAllNews = async (req, res) => {
 };
 
 const getANews = async (req, res) => {
-  res.status(StatusCodes.OK).json('A single headline');
+  const id = req.params.id;
+  const news = await cryptoNews.filter((news) => news.id === id);
+  res.status(StatusCodes.OK).json(news);
 };
 
 const searchNews = async (req, res) => {
+  const { source } = req.query;
+
   res.status(StatusCodes.OK).json('searching home');
 };
 

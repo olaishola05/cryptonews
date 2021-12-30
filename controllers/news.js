@@ -14,12 +14,51 @@ const newsSources = [
 
   {
     name: 'Cointelegraph',
-    url: 'https://cointelegraph.com/markets',
+    url: 'https://cointelegraph.com',
   },
 
   {
     name: 'Tradingview',
     url: 'https://www.tradingview.com/markets/cryptocurrencies/news/',
+  },
+
+  {
+    name: 'livemint',
+    url: 'https://www.livemint.com/amp-market/cryptocurrency',
+  },
+
+  {
+    name: 'business insider',
+    url: 'https://markets.businessinsider.com/cryptocurrencies',
+  },
+
+  {
+    name: 'fxstreet',
+    url: 'https://www.fxstreet.com/cryptocurrencies',
+  },
+
+  {
+    name: 'Todayonchain',
+    url: 'https://www.todayonchain.com/',
+  },
+  {
+    name: 'bitcoin',
+    url: 'https://dailycoin.com/bitcoin-news/',
+  },
+
+  {
+    name: 'Altcoins',
+    url: 'https://dailycoin.com/altcoin-news/',
+  },
+
+  {
+    name: 'coindoo',
+    url: 'https://coindoo.com/news/',
+  },
+
+  {
+    name: 'zycrypto',
+    url: 'https://zycrypto.com/category/news/',
   },
 ];
 
@@ -31,7 +70,7 @@ function fetchNews() {
         const html = response.data;
         const $ = cheerio.load(html);
         $('a:contains("crypto")', html).each(function () {
-          const title = $(this).text();
+          const title = $(this).text().trim();
           const url = $(this).attr('href');
 
           cryptoNews.push({
@@ -41,7 +80,19 @@ function fetchNews() {
             source: news.name,
           });
         });
+
+        $('.td-module-thumb', html).each(function () {
+          const title = $(this).find('a').attr('title');
+          const url = $(this).find('a').attr('href');
+          cryptoNews.push({
+            id: uuidv4(),
+            title,
+            url,
+            source: news.name,
+          });
+        });
       })
+
       .catch((error) => {
         console.log(error);
       });
@@ -52,7 +103,7 @@ function fetchNews() {
 fetchNews();
 
 const getAllNews = async (req, res) => {
-  res.status(StatusCodes.OK).json({ cryptoNews, nhits: cryptoNews.length });
+  res.status(StatusCodes.OK).json({ nhits: cryptoNews.length, cryptoNews });
 };
 
 const getANews = async (req, res) => {

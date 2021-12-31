@@ -10,55 +10,66 @@ const newsSources = [
   {
     name: 'Time',
     url: 'https://time.com/nextadvisor/investing/cryptocurrency/latest-crypto-news/',
+    base: '',
   },
 
   {
     name: 'Cointelegraph',
     url: 'https://cointelegraph.com',
+    base: 'https://cointelegraph.com',
   },
 
   {
     name: 'Tradingview',
     url: 'https://www.tradingview.com/markets/cryptocurrencies/news/',
+    base: '',
   },
 
   {
     name: 'livemint',
     url: 'https://www.livemint.com/amp-market/cryptocurrency',
+    base: 'https://www.livemint.com',
   },
 
   {
     name: 'business insider',
     url: 'https://markets.businessinsider.com/cryptocurrencies',
+    base: 'https://market.businessinsider.com',
   },
 
   {
     name: 'fxstreet',
     url: 'https://www.fxstreet.com/cryptocurrencies',
+    base: '',
   },
 
   {
     name: 'Todayonchain',
     url: 'https://www.todayonchain.com/',
+    base: '',
   },
   {
     name: 'bitcoin',
     url: 'https://dailycoin.com/bitcoin-news/',
+    base: '',
   },
 
   {
     name: 'Altcoins',
     url: 'https://dailycoin.com/altcoin-news/',
+    base: '',
   },
 
   {
     name: 'coindoo',
     url: 'https://coindoo.com/news/',
+    base: '',
   },
 
   {
     name: 'zycrypto',
     url: 'https://zycrypto.com/category/news/',
+    base: '',
   },
 ];
 
@@ -76,7 +87,7 @@ function fetchNews() {
           cryptoNews.push({
             id: uuidv4(),
             title,
-            url,
+            url: news.base + url,
             source: news.name,
           });
         });
@@ -106,20 +117,25 @@ const getAllNews = async (req, res) => {
   res.status(StatusCodes.OK).json({ nhits: cryptoNews.length, cryptoNews });
 };
 
-const getANews = async (req, res) => {
-  const id = req.params.id;
-  const news = await cryptoNews.filter((news) => news.id === id);
+const getNewsById = async (req, res) => {
+  const newsId = req.params.newsId;
+  const news = cryptoNews.filter((news) => news.id == newsId);
   res.status(StatusCodes.OK).json(news);
 };
 
+// const getNewsByName = async (req, res) => {
+//   console.log(req.params.newsName);
+// };
+
 const searchNews = async (req, res) => {
-  const { source } = req.query;
+  const searchParams = req.params;
 
   res.status(StatusCodes.OK).json('searching home');
 };
 
 module.exports = {
   getAllNews,
-  getANews,
+  getNewsById,
   searchNews,
+  // getNewsByName,
 };
